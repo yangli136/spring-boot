@@ -1,0 +1,21 @@
+package com.aexp.springpr.restcassandra.template.config;
+
+import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+public class RepositoryEventBeanValidatingConfigurer implements RepositoryRestConfigurer {
+    private final LocalValidatorFactoryBean localValidatorFactoryBean;
+
+    public RepositoryEventBeanValidatingConfigurer(
+            LocalValidatorFactoryBean localValidatorFactoryBean) {
+        this.localValidatorFactoryBean = localValidatorFactoryBean;
+    }
+
+    @Override
+    public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener v) {
+        v.addValidator("beforeCreate", localValidatorFactoryBean);
+        v.addValidator("beforeSave", localValidatorFactoryBean);
+        v.addValidator("beforeLinkSave", localValidatorFactoryBean);
+    }
+}
